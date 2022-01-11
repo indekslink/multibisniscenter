@@ -20,53 +20,34 @@
 <section class="content">
     <div class="container-fluid">
         <!-- Small boxes (Stat box) -->
-        <div class="row">
-            <div class="col-lg-4 col-6">
+        <div class="row ">
+            <div class="col-12">
                 <!-- small box -->
-                <div class="small-box bg-info">
-                    <div class="inner">
-                        <h3>{{$user->latestReferral->code}}</h3>
+                <div class="info-box">
+                    <span class="info-box-icon bg-info elevation-1"><i class="fas fa-cogs"></i></span>
 
-                        <p>Kode Referal</p>
+                    <div class="info-box-content">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+
+                                <span class="info-box-text">
+                                    <h3>Kode Referal</h3>
+                                </span>
+                                <span class="info-box-number">
+                                    <h2 class="target-kode">{{auth()->user()->latestReferral->code}}</h2>
+
+                                </span>
+                            </div>
+                            <button class="btn-sm btn btn-outline-info" onclick="copyToClipboard('.target-kode','Kode Referal Berhasil di salin')">Salin Kode Referal</button>
+                        </div>
                     </div>
-                    <div class="icon">
-                        <i class="fas fa-cogs"></i>
-                    </div>
-                    <a href="/vendor/#" class="small-box-footer">Ubah <i class="fas fa-arrow-circle-right"></i></a>
+                    <!-- /.info-box-content -->
                 </div>
             </div>
             <!-- ./col -->
 
             <!-- ./col -->
-            <div class="col-lg-4 col-6">
-                <!-- small box -->
-                <div class="small-box bg-warning">
-                    <div class="inner">
-                        <h3>{{\App\Models\User::where('username','!=',auth()->user()->username)->where('is_active','1')->count()}}</h3>
 
-                        <p>User Aktif</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <a href="/vendor/#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
-            <!-- ./col -->
-            <div class="col-lg-4 col-6">
-                <!-- small box -->
-                <div class="small-box bg-danger">
-                    <div class="inner">
-                        <h3>{{\App\Models\User::where('username','!=',auth()->user()->username)->where('is_active','0')->count()}}</h3>
-
-                        <p>User Tidak Aktif</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fas fa-user-slash"></i>
-                    </div>
-                    <a href="/vendor/#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                </div>
-            </div>
             <!-- ./col -->
         </div>
         <!-- /.row -->

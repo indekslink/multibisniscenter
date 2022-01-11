@@ -19,6 +19,8 @@
 
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+    @yield('style')
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -55,10 +57,16 @@
             <ul class="navbar-nav ml-auto">
 
                 <li class="nav-item">
-                    <a class="nav-link text-danger d-flex align-items-center" data-widget="control-sidebar" data-slide="true" href="/vendor/#">
-                        <i class="fas fa-sign-out-alt mr-2"></i>
-                        <span>Logout</span>
-                    </a>
+                    <form action="{{route('logout')}}" method="post">
+
+                    </form>
+                    <form action="{{route('logout')}}" method="post">
+                        @csrf
+                        <button type="submit" class="text-danger btn btn-link">
+                            <i class="fas fa-sign-out-alt mr-2"></i>
+                            <span>Logout</span>
+                        </button>
+                    </form>
                 </li>
             </ul>
         </nav>
@@ -103,6 +111,7 @@
     <!-- AdminLTE App -->
     <script src="/vendor/dist/js/adminlte.js"></script>
     <script src="/js/script.js"></script>
+    @yield('script')
 </body>
 
 </html>

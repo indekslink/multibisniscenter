@@ -39,6 +39,10 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+    public function getRouteKeyName()
+    {
+        return 'username';
+    }
 
     /**
      * The attributes that should be cast.
@@ -65,5 +69,10 @@ class User extends Authenticatable
     public function referal_using()
     {
         return $this->hasMany(ReferalUsing::class);
+    }
+
+    public function bukti_transfer()
+    {
+        return $this->hasOne(BuktiTransfer::class);
     }
 }

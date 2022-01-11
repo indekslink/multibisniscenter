@@ -35,6 +35,7 @@ with font-awesome or any other icon font library -->
                     </a>
                 </li>
                 <li class="nav-header">MANAGE</li>
+                @if(auth()->user()->role->name == 'admin')
                 <li class="nav-item">
                     <a href="{{route('users.index')}}" class="nav-link  {{request()->is('users') || request()->is('users/*') ? 'active' : ''}}">
                         <i class="nav-icon fas fa-users"></i>
@@ -43,6 +44,7 @@ with font-awesome or any other icon font library -->
                         </p>
                     </a>
                 </li>
+                @endif
                 <li class="nav-item">
                     <a href="{{route('referal.index')}}" class="nav-link  {{request()->is('referal') || request()->is('referal/*') ? 'active' : ''}}">
                         <i class="nav-icon fas fa-cogs"></i>

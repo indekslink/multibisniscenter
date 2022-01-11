@@ -25,9 +25,18 @@
 <section class="content">
     <div class="container-fluid">
         <div class="row justify-content-center">
+            @if(session('success'))
+            <div class="col-12 ">
+                <div class="alert alert-success" role="alert">
+                    {{session("success")}}
+                </div>
+            </div>
+            @endif
+
             @forelse($users as $user)
+            @if($user->is_active)
             <div class="col-6 col-lg-4">
-                <div class="card {{$user->is_active ? 'card-primary' : 'card-danger'}} card-outline">
+                <div class="card card-info card-outline">
                     <div class="card-body box-profile">
                         <div class="text-center">
                             <img class="profile-user-img img-fluid img-circle" src="/images/user.jpg" alt="User profile picture">
@@ -35,32 +44,114 @@
 
                         <h3 class="profile-username text-center">{{$user->name}}</h3>
 
-                        <p class="text-muted text-center">{{ Carbon\Carbon::parse($user->created_at)->diffForHumans()}}</p>
+                        <p class="text-muted text-center">Registrasi pada : {{ Carbon\Carbon::parse($user->created_at)->diffForHumans()}}</p>
 
                         <ul class="list-group list-group-unbordered mb-3">
                             <li class="list-group-item">
+                                <b>Status</b> <a class="float-right text-info">Aktif</a>
+                            </li>
+                            <li class="list-group-item">
                                 <b>Kode Referal</b> <a class="float-right">{{$user->latestReferral->code}}</a>
                             </li>
-                            <li class="list-group-item">
-                                <b>Bonus</b> <a class="float-right">0%</a>
-                            </li>
-                            <li class="list-group-item">
-                                <b>Referal Terpakai</b> <a class="float-right">2 Kali</a>
-                            </li>
+
                         </ul>
 
-                        <a href="#" class="btn  {{$user->is_active ? 'btn-outline-primary' : 'btn-outline-danger'}} btn-sm btn-block"><b>Detail</b></a>
+                        <a href="#" class="btn  btn-outline-info  btn-sm btn-block">Detail</a>
                     </div>
                     <!-- /.card-body -->
                 </div>
             </div>
+            @else
+            <div class="col-6 col-lg-4">
+                <div class="card card-danger card-outline">
+                    <div class="card-body box-profile">
+                        <div class="text-center">
+                            <img class="profile-user-img img-fluid img-circle" src="/images/user.jpg" alt="User profile picture">
+                        </div>
+
+                        <h3 class="profile-username text-center">{{$user->name}}</h3>
+
+                        <p class="text-muted text-center">Registrasi pada : {{ Carbon\Carbon::parse($user->created_at)->diffForHumans()}}</p>
+
+                        <ul class="list-group list-group-unbordered mb-3">
+                            <li class="list-group-item">
+                                <b>Status</b> <a class="float-right text-danger">Belum Aktif</a>
+                            </li>
+
+                        </ul>
+                        <div class="row">
+                            <div class="col-6">
+
+                                <a href="{{route('users.show',$user->username)}}" class="btn  btn-outline-info  btn-sm btn-block">Detail</a>
+                            </div>
+                            <div class="col-6">
+                                <!-- Button trigger modal upload foto -->
+                                <button type="button" data-username="{{base64_encode($user->username)}}" class="btn btn-success btn-sm btn-block button-activate">
+                                    Aktifkan
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+            @endif
             @empty
             <div class="text-cneter">
                 Data masih kosong !!!
             </div>
             @endforelse
         </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="modalUploadFoto" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="modalUploadFotoLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalUploadFotoLabel">Upload bukti transfer</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" enctype="multipart/form-data" onsubmit="disabledSubmit('button.submit-upload-file')">
+                            @csrf
+
+                            <div class="mb-4 row text-center">
+                                <div class=" col-6">
+
+                                    <label for="uploadFile">Pilih file</label>
+                                </div>
+                                <div class=" col-6">
+
+                                    <input type="file" required accept=".jpg,.jpeg,.png" name="foto" id="uploadFile">
+                                </div>
+                            </div>
+                            <button class="btn btn-primary float-right btn-block submit-upload-file">Simpan</button>
+
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div><!-- /.container-fluid -->
 </section>
 <!-- /.content -->
+@endsection
+
+@section('script')
+<script>
+    const buttonActivate = document.querySelector('button.button-activate');
+    if (buttonActivate) {
+
+        buttonActivate.addEventListener('click', function(e) {
+            let route = `{{route('users.activate','username')}}`
+            const username = atob(e.target.getAttribute('data-username'));
+            route = route.replace('username', username);
+            $('#modalUploadFoto form').attr('action', route)
+            $('#modalUploadFoto').modal('show')
+        })
+    }
+</script>
 @endsection

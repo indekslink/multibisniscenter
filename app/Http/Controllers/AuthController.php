@@ -43,6 +43,16 @@ class AuthController extends Controller
     {
         return view('auth.register');
     }
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login');
+    }
     public function postRegister(Request $request)
     {
         $request->validate([
@@ -84,7 +94,8 @@ class AuthController extends Controller
                 'password' => Hash::make($request->password),
                 'is_active' => 0,
                 'no_telepon' => $request->no_telepon,
-                'role_id' => 2
+                'role_id' => 2,
+                'avatar' => 'user.jpg'
             ]);
 
             $this->create_referal($user);

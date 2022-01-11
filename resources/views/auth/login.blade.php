@@ -10,7 +10,10 @@
         @error('credentials')
         <div class="alert alert-danger alert-dismissible fade show my-1" role="alert">
             {{ $message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+
         </div>
         @enderror
         <form action="{{route('postLogin')}}" method="post" onsubmit="disabledSubmit('button.submit-login')">

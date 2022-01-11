@@ -117,8 +117,8 @@
             </div>
         </div>
     </div>
-    <div class="lockscreen-footer text-center">
-        Copyright &copy; 2014-2019 <b><a href="http://adminlte.io" class="text-black">AdminLTE.io</a></b><br>
+    <div class="lockscreen-footer text-center mb-2">
+        Copyright &copy; {{copyright()}} <b><a href="http://multibisniscenter" class="text-black">multibisniscenter.com</a></b><br>
         All rights reserved
     </div>
     </div>

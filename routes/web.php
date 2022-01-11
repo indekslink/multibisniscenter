@@ -29,6 +29,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::middleware('is_active')->group(function () {
         Route::get('/', [HomeController::class, 'index'])->name('home');
+        Route::post('/users/{user:username}/activate', [UserController::class, 'activate'])->name('users.activate');
         Route::resources([
             'users' => UserController::class,
             'referal' => ReferalController::class,
