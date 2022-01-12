@@ -26,6 +26,13 @@
 <section class="content">
     <div class="container-fluid">
         <div class="row justify-content-center">
+            @if(session('success'))
+            <div class="col-12 ">
+                <div class="alert alert-success" role="alert">
+                    {{session("success")}}
+                </div>
+            </div>
+            @endif
             <div class="col-12">
                 <div class="row">
                     <div class="col-md-5">
@@ -82,7 +89,15 @@
 
                                 <strong><i class="fas fa-genderless mr-1"></i> Jenis Kelamin</strong>
 
-                                <p class="text-muted">{{$user->jenis_kelamin ?? 'Belum Diisi'}}</p>
+                                <p class="text-muted">
+                                    @if($user->jenis_kelamin == 'L')
+                                    Laki-Laki
+                                    @elseif($user->jenis_kelamin == 'P')
+                                    Perempuan
+                                    @else
+                                    Belum Diisi
+                                    @endif
+                                </p>
                                 <hr>
                                 <strong><i class="fas fa-calendar-alt mr-1"></i> Akun Dibuat</strong>
 
@@ -105,8 +120,8 @@
                     <div class="card-header p-2">
                         <ul class="nav nav-pills">
 
-                            <li class="nav-item"><a class="nav-link active" href="#settings" data-toggle="tab">Ubah Profil</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#autentikasi" data-toggle="tab">Ubah Autentikasi</a></li>
+                            <li class="nav-item"><a class="nav-link {{$errors->first('username')|| $errors->first('password') ? '' : 'active'}}" href="#settings" data-toggle="tab">Ubah Profil</a></li>
+                            <li class="nav-item"><a class="nav-link {{$errors->first('username')|| $errors->first('password') ? 'active' : ''}}" href="#autentikasi" data-toggle="tab">Ubah Autentikasi</a></li>
                         </ul>
                     </div><!-- /.card-header -->
                     <div class="card-body">
@@ -116,87 +131,138 @@
 
                             <!-- /.tab-pane -->
 
-                            <div class="tab-pane active" id="settings">
-                                <form class="form-horizontal">
+                            <div class="tab-pane {{$errors->first('username')|| $errors->first('password') ? '' : 'active'}}" id="settings">
+                                <form enctype="multipart/form-data" onsubmit="disabledSubmit('button.submit-ubah-profil')" class="form-horizontal" method="post" action="{{ route('users.update',$user->username) }}">
+                                    @csrf
+                                    @method('PUT')
                                     <div class="form-group row">
                                         <label for="inputName" class="col-sm-2 col-form-label">Nama Lengkap</label>
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="inputName" value="{{old('name') ?? $user->name}}">
+                                            <input type="text" class="form-control @error('nama_lengkap') is-invalid @enderror" name="nama_lengkap" id="inputName" value="{{old('name') ?? $user->name}}">
+                                            @error('nama_lengkap')
+                                            <div class="text-danger">
+                                                <small>{{$message}}</small>
+                                            </div>
+                                            @enderror
                                         </div>
-                                        @error('name')
-                                        <div class="text-danger">
-                                            <small>{{$message}}</small>
-                                        </div>
-                                        @enderror
                                     </div>
                                     <div class="form-group row">
                                         <label for="inputHp" class="col-sm-2 col-form-label">No Telepon</label>
                                         <div class="col-sm-10">
                                             <input type="text" class="form-control @error('no_telepon') is-invalid @enderror" name="no_telepon" id="inputHp" value="{{old('no_telepon') ?? $user->no_telepon}}">
+                                            @error('no_telepon')
+                                            <div class="text-danger">
+                                                <small>{{$message}}</small>
+                                            </div>
+                                            @enderror
                                         </div>
-                                        @error('no_telepon')
-                                        <div class="text-danger">
-                                            <small>{{$message}}</small>
-                                        </div>
-                                        @enderror
                                     </div>
                                     <div class="form-group row">
                                         <label for="inputGender" class="col-sm-2 col-form-label">Jenis Kelamin</label>
                                         <div class="col-sm-10">
-                                            <select id="inputGender" name="jenis_kelamim" class="form-control">
+                                            <select id="inputGender" name="jenis_kelamin" class="form-control @error('jenis_kelamin') is-invalid @enderror">
                                                 <option value="" {{$user->jenis_kelamin == null ? 'selected' : ''}}>Belum Diisi</option>
-                                                <option value="L" {{$user->jenis_kelamin && $user->jenis_kelamin == 'L' ? 'selected' : ''}}>Laki-Laki</option>
-                                                <option value="P" {{$user->jenis_kelamin && $user->jenis_kelamin == 'L' ? 'selected' : ''}}>Perempuan</option>
+                                                <option value="L" {{$user->jenis_kelamin && $user->jenis_kelamin == 'L' || old('jenis_kelamin') == 'L' ? 'selected' : ''}}>Laki-Laki</option>
+                                                <option value="P" {{$user->jenis_kelamin && $user->jenis_kelamin == 'P' || old('jenis_kelamin') == 'P' ? 'selected' : ''}}>Perempuan</option>
                                             </select>
+                                            @error('jenis_kelamin')
+                                            <div class="text-danger">
+                                                <small>{{$message}}</small>
+                                            </div>
+                                            @enderror
                                         </div>
-                                        @error('jenis_kelamin')
-                                        <div class="text-danger">
-                                            <small>{{$message}}</small>
-                                        </div>
-                                        @enderror
                                     </div>
                                     <div class="form-group row">
                                         <label for="inputAlamat" class="col-sm-2 col-form-label">Alamat</label>
                                         <div class="col-sm-10">
                                             <textarea type="text" class="form-control @error('alamat') is-invalid @enderror" name="alamat" id="inputAlamat">{{old('alamat') ?? $user->alamat}}</textarea>
+                                            @error('alamat')
+                                            <div class="text-danger">
+                                                <small>{{$message}}</small>
+                                            </div>
+                                            @enderror
                                         </div>
-                                        @error('alamat')
-                                        <div class="text-danger">
-                                            <small>{{$message}}</small>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="avatar" class="col-sm-2 col-form-label">Avatar</label>
+                                        <div class="col-sm-10">
+                                            <div class="row align-items-center">
+                                                <div class="col-4">
+                                                    <img src="{{avatar('/images/',$user->avatar)}}" alt="" class="preview-avatar img-fluid img-thumbnail rounded-circle">
+                                                </div>
+                                                <div class="col-8">
+                                                    <input class="with-preview" data-target="img.preview-avatar" type="file" accept=".jpg, .jpeg, .png" name="avatar" id="avatar">
+                                                    @error('avatar')
+                                                    <div class="text-danger">
+                                                        <small>{{$message}}</small>
+                                                    </div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+
                                         </div>
-                                        @enderror
                                     </div>
                                     <div class="form-group row">
                                         <div class="offset-sm-2 col-sm-10">
-                                            <button type="submit" class="btn btn-danger">Submit</button>
+                                            <button type="submit" class="btn btn-success submit-ubah-profil">Simpan</button>
                                         </div>
                                     </div>
                                 </form>
                             </div>
-                            <div class="tab-pane" id="autentikasi">
-                                <form class="form-horizontal">
+                            <div class="tab-pane {{$errors->first('username')|| $errors->first('password') ? 'active' : ''}}" id="autentikasi">
+                                <form onsubmit="disabledSubmit('button.submit-ubah-autentikasi')" class="form-horizontal" method="post" action="{{ route('users.update.autentikasi',$user->username) }}">
+                                    @csrf
+
+                                    @method("PUT")
+
                                     <div class="form-group row">
                                         <label for="inputUsername" class="col-sm-2 col-form-label">Username</label>
                                         <div class="col-sm-10">
                                             <input type="text" class="form-control @error('username') is-invalid @enderror" name="username" id="inputUsername" value="{{old('username') ?? $user->username}}">
+                                            @error('username')
+                                            <div class="text-danger">
+                                                <small>{{$message}}</small>
+                                            </div>
+                                            @enderror
                                         </div>
-                                        @error('username')
-                                        <div class="text-danger">
-                                            <small>{{$message}}</small>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="inputPassword" class="col-sm-2 col-form-label">Password Baru</label>
+                                        <div class="col-sm-10">
+                                            <input type="password" class="form-control toggle-password @error('password') is-invalid @enderror" name="password" id="inputPassword">
+                                            @error('password')
+                                            <div class="text-danger">
+                                                <small>{{$message}}</small>
+                                            </div>
+                                            @enderror
                                         </div>
-                                        @enderror
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="inputPasswordBaru" class="col-sm-2 col-form-label">Konfirmasi Password Baru</label>
+                                        <div class="col-sm-10">
+                                            <input type="password" class="form-control toggle-password" name="password_confirmation" id="inputPasswordBaru">
+                                            <div class="icheck-primary mt-3">
+                                                <input type="checkbox" id="toggle-password">
+                                                <label for="toggle-password" class="font-weight-normal">
+                                                    Tampilkan Password
+                                                </label>
+                                            </div>
+                                        </div>
+
                                     </div>
 
 
 
                                     <div class="form-group row">
                                         <div class="offset-sm-2 col-sm-10">
-                                            <div><sup><b>*</b></sup>Jika Anda mengganti Username atau Password, maka Anda akan diarahkan untuk <strong>Login</strong> kembali</div>
+                                            <small class="d-block mb-2"><sup><b>*</b></sup>Jika Anda mengganti Username atau Password, maka Anda akan diarahkan untuk <strong>Login</strong> kembali</small>
+                                            <small class="d-block "><sup><b>*</b></sup>Abaikan <b>field password</b> jika Anda tidak ingin mengubahnya</small>
                                         </div>
                                     </div>
+
                                     <div class="form-group row">
                                         <div class="offset-sm-2 col-sm-10">
-                                            <button type="submit" class="btn btn-danger">Submit</button>
+                                            <button type="submit" class="btn btn-success submit-ubah-autentikasi">Simpan</button>
                                         </div>
                                     </div>
                                 </form>
@@ -213,4 +279,24 @@
     </div><!-- /.container-fluid -->
 </section>
 <!-- /.content -->
+@endsection
+@section('script')
+<script>
+    const togglePassword = document.getElementById('toggle-password')
+    const targetInput = document.querySelectorAll('.toggle-password')
+    const labelTogglePassword = document.querySelector('label[for="toggle-password"]')
+    togglePassword.addEventListener('change', function(e) {
+        const isChecked = e.target.checked;
+        targetInput.forEach(input => {
+            if (isChecked) {
+                input.setAttribute('type', 'text');
+                labelTogglePassword.innerHTML = 'Sembuyikan Password'
+            } else {
+
+                input.setAttribute('type', 'password');
+                labelTogglePassword.innerHTML = 'Tampilkan Password'
+            }
+        })
+    })
+</script>
 @endsection

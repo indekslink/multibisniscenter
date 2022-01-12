@@ -69,7 +69,7 @@
             </div>
             <div class="form-group mb-3">
                 <label for="code">Punya Kode Referal ?</label>
-                <input type="text" name="kode_referal" value="{{old('kode_referal') ?? ''}}" class="form-control  @error('kode_referal') is-invalid @enderror" placeholder="Masukkan Disini">
+                <input autocomplete="off" type="text" name="kode_referal" value="{{old('kode_referal') ?? ''}}" class="form-control  @error('kode_referal') is-invalid @enderror" placeholder="Masukkan Disini">
                 @error('kode_referal')
                 <small class="text-danger d-block w-100">{{ $message }}</small>
                 @enderror

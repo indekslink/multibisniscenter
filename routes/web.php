@@ -30,6 +30,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::middleware('is_active')->group(function () {
         Route::get('/', [HomeController::class, 'index'])->name('home');
         Route::post('/users/{user:username}/activate', [UserController::class, 'activate'])->name('users.activate');
+        Route::put('/users/{user:username}/update_autentikasi', [UserController::class, 'update_autentikasi'])->name('users.update.autentikasi');
         Route::resources([
             'users' => UserController::class,
             'referal' => ReferalController::class,

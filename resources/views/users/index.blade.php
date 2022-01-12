@@ -25,6 +25,20 @@
 <section class="content">
     <div class="container-fluid">
         <div class="row justify-content-center">
+            <div class="col-12">
+                <form method="get" action="{{route('users.index')}}" id="form-filter">
+
+                    <div class="form-group">
+                        <label>Filter status User</label>
+                        <select name="status" class="form-control filter-user">
+                            <option value="all" {{!request()->query('status')  ? 'selected': '' }}>Semua</option>
+                            <option value="active" {{request()->query('status') == 'active' ? 'selected': '' }}>Aktif</option>
+                            <option value="inactive" {{request()->query('status') == 'inactive' ? 'selected': '' }}>Tidak Aktif</option>
+
+                        </select>
+                    </div>
+                </form>
+            </div>
             @if(session('success'))
             <div class="col-12 ">
                 <div class="alert alert-success" role="alert">
@@ -36,7 +50,7 @@
             @forelse($users as $user)
             @if($user->is_active)
             <div class="col-6 col-lg-4">
-                <div class="card card-info card-outline">
+                <div class="card card-success card-outline">
                     <div class="card-body box-profile">
                         <div class="text-center">
                             <img class="profile-user-img img-fluid img-circle" src="/images/user.jpg" alt="User profile picture">
@@ -48,15 +62,13 @@
 
                         <ul class="list-group list-group-unbordered mb-3">
                             <li class="list-group-item">
-                                <b>Status</b> <a class="float-right text-info">Aktif</a>
+                                <b>Status</b> <a class="float-right text-success">Aktif</a>
                             </li>
-                            <li class="list-group-item">
-                                <b>Kode Referal</b> <a class="float-right">{{$user->latestReferral->code}}</a>
-                            </li>
+
 
                         </ul>
 
-                        <a href="#" class="btn  btn-outline-info  btn-sm btn-block">Detail</a>
+                        <a href="{{route('users.show',$user->username)}}" class="btn  btn-outline-info  btn-sm btn-block">Detail</a>
                     </div>
                     <!-- /.card-body -->
                 </div>
@@ -153,5 +165,12 @@
             $('#modalUploadFoto').modal('show')
         })
     }
+
+    $('select.filter-user').on('change', function() {
+
+
+        $('form#form-filter').submit();
+
+    })
 </script>
 @endsection

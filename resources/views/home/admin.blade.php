@@ -58,7 +58,7 @@
                     <div class="icon">
                         <i class="fas fa-users"></i>
                     </div>
-                    <a href="{{route('users.index')}}" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="{{route('users.index',['status'=>'active'])}}" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <!-- ./col -->
@@ -73,7 +73,7 @@
                     <div class="icon">
                         <i class="fas fa-user-slash"></i>
                     </div>
-                    <a href="{{route('users.index')}}" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="{{route('users.index',['status'=>'inactive'])}}" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <!-- ./col -->

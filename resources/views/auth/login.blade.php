@@ -7,6 +7,11 @@
     <div class="card-body login-card-body rounded-pill">
         <p class="login-box-msg">Silahkan masuk untuk memulai sesi anda</p>
 
+        @if(session('success'))
+        <div class="alert alert-success p-2 my-1" role="alert">
+            {{ session('success') }}
+        </div>
+        @endif
         @error('credentials')
         <div class="alert alert-danger alert-dismissible fade show my-1" role="alert">
             {{ $message }}
@@ -33,10 +38,10 @@
                 @enderror
             </div>
             <div class="input-group mb-3">
-                <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" placeholder="Password">
+                <input type="password" class="form-control show-password @error('password') is-invalid @enderror" name="password" placeholder="Password">
                 <div class="input-group-append">
                     <div class="input-group-text">
-                        <span class="fas fa-user-lock"></span>
+                        <span class="fas fa-user-lock target-icon"></span>
                     </div>
                 </div>
                 @error("password")
@@ -77,4 +82,32 @@
     </div>
     <!-- /.login-card-body -->
 </div>
+@endsection
+
+@section('script')
+<script>
+    $('input.show-password').on('keyup keydown keypress', function() {
+        const val = $(this).val();
+        if (val) {
+            $('span.target-icon').removeClass('fa-user-lock').addClass('fa-eye')
+        } else {
+            $('span.target-icon').removeClass('fa-eye').addClass('fa-user-lock')
+        }
+    })
+    $('span.target-icon').on('click', function() {
+        if ($(this).hasClass('fa-eye') || $(this).hasClass('fa-eye-slash')) {
+            const inputPassword = $('input.show-password');
+            if ($(inputPassword).attr('type') == 'text') {
+
+                $(inputPassword).attr("type", 'password');
+                $(this).removeClass('fa-eye-slash').addClass('fa-eye');
+
+            } else {
+
+                $(inputPassword).attr("type", 'text');
+                $(this).removeClass('fa-eye').addClass('fa-eye-slash');
+            }
+        }
+    })
+</script>
 @endsection
